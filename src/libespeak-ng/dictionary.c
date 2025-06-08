@@ -584,6 +584,7 @@ const char *GetTranslatedPhonemeString(int phoneme_mode)
 	char phon_buf[30];
 	char phon_buf2[30];
 	PHONEME_LIST *plist;
+	int show_syllable_marks = 0; // Controlled by flag
 
 	static const char stress_chars[] = "==,,''";
 
@@ -596,13 +597,16 @@ const char *GetTranslatedPhonemeString(int phoneme_mode)
 	}
 
 	use_ipa = phoneme_mode & espeakPHONEMES_IPA;
+	show_syllable_marks = (phoneme_mode & espeakPHONEMES_SYLLABLE) ? 1 : 0;
 	if (phoneme_mode & espeakPHONEMES_TIE) {
 		use_tie = phoneme_mode >> 8;
 		separate_phonemes = 0;
 	} else {
-		separate_phonemes = phoneme_mode >> 8;
-		use_tie = 0;
+			separate_phonemes = phoneme_mode >> 8;
+			use_tie = 0;
 	}
+
+	int prev_was_syllable = 0; // Track if previous phoneme was part of a syllable
 
 	for (ix = 1; ix < (n_phoneme_list-2); ix++) {
 		buf = phon_buf;
@@ -613,6 +617,12 @@ const char *GetTranslatedPhonemeString(int phoneme_mode)
 		if (plist->newword & PHLIST_START_OF_WORD && !(plist->newword & (PHLIST_START_OF_SENTENCE | PHLIST_START_OF_CLAUSE)))
 			*buf++ = ' ';
 
+		// Add syllable boundary marker before a new syllable
+		if (show_syllable_marks && prev_was_syllable && (plist->synthflags & SFLAG_SYLLABLE) && 
+		    !(plist->newword & PHLIST_START_OF_WORD)) {
+			*buf++ = '.';
+		}
+
 		if ((!plist->newword) || (separate_phonemes == ' ')) {
 			if ((separate_phonemes != 0) && (ix > 1)) {
 				utf8_in(&c, phon_buf2);
@@ -622,6 +632,7 @@ const char *GetTranslatedPhonemeString(int phoneme_mode)
 		}
 
 		if (plist->synthflags & SFLAG_SYLLABLE) {
+			prev_was_syllable = 1;
 			if ((stress = plist->stresslevel) > 1) {
 				c = 0;
 				if (stress > STRESS_IS_PRIORITY) stress = STRESS_IS_PRIORITY;

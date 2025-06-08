@@ -84,6 +84,8 @@ static const char *help_text =
     "-X\t   Write phonemes mnemonics and translation trace to stdout\n"
     "-z\t   No final sentence pause at the end of the text\n"
     "-D\t   Enable deterministic random mode\n"
+    "--syllable\n"
+    "\t   Show syllable boundaries with . in phoneme output (use with -x)\n"
     "--compile=<voice name>\n"
     "\t   Compile pronunciation rules and dictionary from the current\n"
     "\t   directory. <voice name> specifies the language\n"
@@ -334,6 +336,7 @@ int main(int argc, char **argv)
 		{ "compile-phonemes", optional_argument, 0, 0x110 },
 		{ "load",    no_argument,       0, 0x111 },
 		{ "ssml-break", required_argument, 0, 0x112 },
+		{ "syllable", no_argument,       0, 0x113 },
 		{ 0, 0, 0, 0 }
 	};
 
@@ -592,6 +595,9 @@ int main(int argc, char **argv)
 			break;
 		case 0x112: // --ssml-break
 			ssml_break = atoi(optarg2);
+			break;
+		case 0x113: // --syllable
+			phoneme_options |= espeakPHONEMES_SYLLABLE;
 			break;
 		default:
 			exit(0);
