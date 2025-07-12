@@ -37,11 +37,11 @@ extern "C"
 #define CTRL_EMBEDDED    0x01 // control character at the start of an embedded command
 #define REPLACED_E       'E' // 'e' replaced by silent e
 
-#define N_WORD_PHONEMES  200 // max phonemes in a word
+#define N_WORD_PHONEMES  3000 // max phonemes in a word
 #define N_WORD_BYTES     160 // max bytes for the UTF8 characters in a word
 #define N_PHONEME_BYTES  160 // max bytes for a phoneme
-#define N_CLAUSE_WORDS   300 // max words in a clause
-#define N_TR_SOURCE      800 // the source text of a single clause (UTF8 bytes)
+#define N_CLAUSE_WORDS   4500 // max words in a clause
+#define N_TR_SOURCE      12000 // the source text of a single clause (UTF8 bytes)
 
 #define N_RULE_GROUP2    120 // max num of two-letter rule chains
 #define N_HASH_DICT     1024

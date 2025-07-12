@@ -639,6 +639,11 @@ static int TranslateWord2(Translator *tr, char *word, WORD_TAB *wtab, int pre_pa
 		}
 	}
 	// From here, we may require up to 3 phonemes
+	
+	// Check if there are unprocessed phonemes due to list limit
+	if (*p != 0 && (option_phonemes & espeakPHONEMES_TRACE)) {
+		fprintf(f_trans, "Warning: Phoneme list truncated at position %d (max %d)\n", n_ph_list2, N_PHONEME_LIST);
+	}
 
 	// This may require up to 1 phoneme
 	if (word_flags & FLAG_COMMA_AFTER)

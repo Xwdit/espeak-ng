@@ -595,6 +595,9 @@ const char *GetTranslatedPhonemeString(int phoneme_mode)
 			return "";
 		}
 	}
+	
+	// Clear the first character to ensure clean start
+	phon_out_buf[0] = 0;
 
 	use_ipa = phoneme_mode & espeakPHONEMES_IPA;
 	show_syllable_marks = (phoneme_mode & espeakPHONEMES_SYLLABLE) ? 1 : 0;
@@ -609,10 +612,14 @@ const char *GetTranslatedPhonemeString(int phoneme_mode)
 	int prev_was_syllable = 0; // Track if previous phoneme was part of a syllable
 
 	for (ix = 1; ix < (n_phoneme_list-2); ix++) {
+		// Safety check to prevent reading beyond array bounds
+		if (ix >= N_PHONEME_LIST) {
+			break;
+		}
+		
 		buf = phon_buf;
-
 		plist = &phoneme_list[ix];
-
+		
 		WritePhMnemonic(phon_buf2, plist->ph, plist, use_ipa, &flags);
 		if (plist->newword & PHLIST_START_OF_WORD && !(plist->newword & (PHLIST_START_OF_SENTENCE | PHLIST_START_OF_CLAUSE)))
 			*buf++ = ' ';

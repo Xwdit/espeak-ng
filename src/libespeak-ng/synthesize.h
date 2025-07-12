@@ -32,7 +32,7 @@ extern "C"
 
 #define espeakINITIALIZE_PHONEME_IPA 0x0002 // move this to speak_lib.h, after eSpeak version 1.46.02
 
-#define N_PHONEME_LIST 1000 // enough for source[N_TR_SOURCE] full of text, else it will truncate
+#define N_PHONEME_LIST 24000 // increased from 1000 to handle very long texts
 
 #define N_SEQ_FRAMES  25 // max frames in a spectrum sequence (real max is ablut 8)
 #define STEPSIZE      64 // 2.9mS at 22 kHz sample rate
